@@ -1,12 +1,19 @@
 import styles from './field.module.css';
-import { store } from '../../redux/store';
 import win from '../db_json/win.json';
-import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	setValueDraw,
+	setGameEnd,
+	setField,
+	setCurrentPlayer,
+} from '../../redux/actions';
 
 export const FieldLayout = () => {
-	const [state, setState] = useState(store.getState());
+	const field = useSelector((state) => state.field);
+	const isGameEnded = useSelector((state) => state.isGameEnded);
+	const currentPlayer = useSelector((state) => state.currentPlayer);
 
-	const { field, isGameEnded, currentPlayer } = state;
+	const dispatch = useDispatch();
 
 	const changeValue = (index) => {
 		if (!isGameEnded) {
@@ -14,14 +21,11 @@ export const FieldLayout = () => {
 				const newField = [...field];
 				newField[index] = currentPlayer;
 				const hasWon = checkWin(newField, currentPlayer);
-				store.dispatch({ type: 'SET_VALUE_GAME_END', payload: hasWon });
-				store.dispatch({ type: 'SET_VALUE_DRAW', payload: checkDraw(newField) });
-				store.dispatch({ type: 'SET_VALUE_FIELD', payload: newField });
+				dispatch(setGameEnd(hasWon));
+				dispatch(setValueDraw(checkDraw(newField)));
+				dispatch(setField(newField));
 				if (!hasWon) {
-					store.dispatch({
-						type: 'SET_VALUE_CURRENT_PLAYER',
-						payload: currentPlayer === 'X' ? 'O' : 'X',
-					});
+					dispatch(setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X'));
 				}
 			}
 		}
@@ -41,11 +45,6 @@ export const FieldLayout = () => {
 	const checkDraw = (newField) => {
 		return newField.every((item) => item !== '');
 	};
-
-	useEffect(() => {
-		const unsubscribe = store.subscribe(() => setState(store.getState()));
-		return () => unsubscribe();
-	}, []);
 
 	return (
 		<>

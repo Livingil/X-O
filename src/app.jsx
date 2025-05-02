@@ -1,13 +1,16 @@
+import { useDispatch } from 'react-redux';
 import styles from './app.module.css';
 import { FieldLayout } from './components/field/field';
 import { InformationLayout } from './components/information';
-import { store } from './redux/store';
+import { RESTART } from './redux/actions';
 
 // cd vite-project
 
 export const AppLayout = () => {
+	const dispatch = useDispatch();
+
 	const newPlay = () => {
-		store.dispatch({ type: 'RESTART' });
+		dispatch(RESTART);
 	};
 
 	return (
