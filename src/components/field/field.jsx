@@ -1,7 +1,5 @@
-/* eslint-disable react/prop-types */
-
 import styles from './field.module.css';
-import { store } from '../../store';
+import { store } from '../../redux/store';
 import win from '../db_json/win.json';
 import { useEffect, useState } from 'react';
 

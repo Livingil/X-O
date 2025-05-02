@@ -1,13 +1,11 @@
 import styles from './app.module.css';
 import { FieldLayout } from './components/field/field';
 import { InformationLayout } from './components/information';
-import { store } from './store';
+import { store } from './redux/store';
 
 // cd vite-project
 
 export const AppLayout = () => {
-	// const { currentPlayer, isGameEnded, isDraw, field } = store.getState();
-
 	const newPlay = () => {
 		store.dispatch({ type: 'RESTART' });
 	};
@@ -17,18 +15,11 @@ export const AppLayout = () => {
 			<div className={styles.container}>
 				<h1>Крестики нолики</h1>
 				<h2>
-					<InformationLayout
-					// currentPlayer={currentPlayer}
-					// isDraw={isDraw}
-					// isGameEnded={isGameEnded}
-					/>
+					<InformationLayout />
 				</h2>
 			</div>
 			<div>
-				<FieldLayout
-				// changeValue={changeValue}
-				// field={field}
-				/>
+				<FieldLayout />
 			</div>
 			<div className={styles.container}>
 				<div className={styles['buttons - container']}>

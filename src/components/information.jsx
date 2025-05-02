@@ -1,21 +1,15 @@
-import { useEffect, useState } from 'react';
-import { store } from '../store';
+import { useSelector } from 'react-redux';
 
 export const InformationLayout = () => {
-	const [state, setState] = useState(store.getState());
+	const isDraw = useSelector((state) => state.isDraw);
+	const isGameEnded = useSelector((state) => state.isGameEnded);
+	const currentPlayer = useSelector((state) => state.currentPlayer);
 
-	const { isDraw, isGameEnded, currentPlayer } = state;
-
-	useEffect(() => {
-		const unsubscribe = store.subscribe(() => setState(store.getState()));
-		return () => unsubscribe();
-	}, []);
-
-	if (isDraw) {
-		return 'Ничья';
+	if (isGameEnded) {
+		return `Победа:${currentPlayer}`;
 	} else {
-		if (isGameEnded) {
-			return `Победа:${currentPlayer}`;
+		if (isDraw) {
+			return 'Ничья';
 		} else {
 			return `Ходит:${currentPlayer}`;
 		}

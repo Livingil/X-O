@@ -1,8 +1,4 @@
-// const [currentPlayer, setCurrentPlayer] = useState('X');
-// const [isGameEnded, setIsGameEnded] = useState(false);
-// const [isDraw, setIsDraw] = useState(false);
-// const [field, setField] = useState(pole);
-import pole from './components/db_json/pole.json';
+import pole from '../components/db_json/pole.json';
 
 export const initialState = {
 	currentPlayer: 'X',
