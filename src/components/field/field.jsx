@@ -1,28 +1,25 @@
-import styles from './field.module.css';
+/* eslint-disable react/prop-types */
+import { Component } from 'react';
+import { connect } from 'react-redux';
 import win from '../db_json/win.json';
-import { useDispatch, useSelector } from 'react-redux';
 import {
-	setValueDraw,
 	setGameEnd,
 	setField,
+	setValueDraw,
 	setCurrentPlayer,
-} from '../../redux/actions';
+} from '../.././redux/actions';
 
-export const FieldLayout = () => {
-	const field = useSelector((state) => state.field);
-	const isGameEnded = useSelector((state) => state.isGameEnded);
-	const currentPlayer = useSelector((state) => state.currentPlayer);
+export class FieldLayoutContainer extends Component {
+	changeValue = (index) => {
+		const { field, isGameEnded, currentPlayer, dispatch } = this.props;
 
-	const dispatch = useDispatch();
-
-	const changeValue = (index) => {
 		if (!isGameEnded) {
 			if (!field[index]) {
 				const newField = [...field];
 				newField[index] = currentPlayer;
-				const hasWon = checkWin(newField, currentPlayer);
+				const hasWon = this.checkWin(newField, currentPlayer);
 				dispatch(setGameEnd(hasWon));
-				dispatch(setValueDraw(checkDraw(newField)));
+				dispatch(setValueDraw(this.checkDraw(newField)));
 				dispatch(setField(newField));
 				if (!hasWon) {
 					dispatch(setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X'));
@@ -31,7 +28,7 @@ export const FieldLayout = () => {
 		}
 	};
 
-	const checkWin = (newField, currentPlayer) => {
+	checkWin = (newField, currentPlayer) => {
 		return win.some((pattern) => {
 			const [a, b, c] = pattern;
 			return (
@@ -41,24 +38,32 @@ export const FieldLayout = () => {
 			);
 		});
 	};
-
-	const checkDraw = (newField) => {
+	checkDraw = (newField) => {
 		return newField.every((item) => item !== '');
 	};
+	render() {
+		return (
+			<>
+				<div className="buttons-container">
+					{this.props.field.map((item, index) => (
+						<button
+							className="button-pole"
+							key={index}
+							onClick={() => this.changeValue(index)}
+						>
+							{item}
+						</button>
+					))}
+				</div>
+			</>
+		);
+	}
+}
 
-	return (
-		<>
-			<div className={styles['buttons-container']}>
-				{field.map((item, index) => (
-					<button
-						className={styles.button}
-						key={index}
-						onClick={() => changeValue(index)}
-					>
-						{item}
-					</button>
-				))}
-			</div>
-		</>
-	);
-};
+const mapStateToProps = (state) => ({
+	field: state.field,
+	isGameEnded: state.isGameEnded,
+	currentPlayer: state.currentPlayer,
+});
+
+export const FieldLayout = connect(mapStateToProps)(FieldLayoutContainer);

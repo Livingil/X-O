@@ -1,11 +1,4 @@
-import pole from '../components/db_json/pole.json';
-
-export const initialState = {
-	currentPlayer: 'X',
-	isGameEnded: false,
-	isDraw: false,
-	field: pole,
-};
+import { initialState } from './initial_state';
 
 export const appReducer = (state = initialState, action) => {
 	const { type, payload } = action;

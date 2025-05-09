@@ -1,17 +1,27 @@
-import { useSelector } from 'react-redux';
+/* eslint-disable react/prop-types */
+import React from 'react';
+import { connect } from 'react-redux';
 
-export const InformationLayout = () => {
-	const isDraw = useSelector((state) => state.isDraw);
-	const isGameEnded = useSelector((state) => state.isGameEnded);
-	const currentPlayer = useSelector((state) => state.currentPlayer);
+export class InformationLayoutContainer extends React.Component {
+	render() {
+		const { isDraw, isGameEnded, currentPlayer } = this.props;
 
-	if (isGameEnded) {
-		return `Победа:${currentPlayer}`;
-	} else {
-		if (isDraw) {
-			return 'Ничья';
+		if (isGameEnded) {
+			return `Победа:${currentPlayer}`;
 		} else {
-			return `Ходит:${currentPlayer}`;
+			if (isDraw) {
+				return 'Ничья';
+			} else {
+				return `Ходит:${currentPlayer}`;
+			}
 		}
 	}
-};
+}
+
+const mapStateToProps = (state) => ({
+	isDraw: state.isDraw,
+	isGameEnded: state.isGameEnded,
+	currentPlayer: state.currentPlayer,
+});
+
+export const InformationLayout = connect(mapStateToProps)(InformationLayoutContainer);

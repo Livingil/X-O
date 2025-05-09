@@ -1,36 +1,39 @@
-import { useDispatch } from 'react-redux';
-import styles from './app.module.css';
+/* eslint-disable react/prop-types */
+import React from 'react';
 import { FieldLayout } from './components/field/field';
 import { InformationLayout } from './components/information';
 import { RESTART } from './redux/actions';
+import { connect } from 'react-redux';
 
-// cd vite-project
+export class AppLayoutContainer extends React.Component {
+	constructor() {
+		super();
+		this.newPlay = this.newPlay.bind(this);
+	}
 
-export const AppLayout = () => {
-	const dispatch = useDispatch();
-
-	const newPlay = () => {
+	newPlay() {
+		const { dispatch } = this.props;
 		dispatch(RESTART);
-	};
-
-	return (
-		<>
-			<div className={styles.container}>
-				<h1>Крестики нолики</h1>
-				<h2>
-					<InformationLayout />
-				</h2>
-			</div>
-			<div>
-				<FieldLayout />
-			</div>
-			<div className={styles.container}>
-				<div className={styles['buttons - container']}>
-					<button className={styles.button} onClick={newPlay}>
+	}
+	render() {
+		return (
+			<>
+				<div className="text-center max-w-full m-auto">
+					<h1 className="text-2xl font-bold">Крестики нолики</h1>
+					<h2 className="text-base font-medium  animate-bounce">
+						<InformationLayout />
+					</h2>
+				</div>
+				<div>
+					<FieldLayout />
+				</div>
+				<div className="text-center max-w-2/12 m-auto">
+					<button className="button" onClick={this.newPlay}>
 						Начать сначала
 					</button>
 				</div>
-			</div>
-		</>
-	);
-};
+			</>
+		);
+	}
+}
+export const AppLayout = connect()(AppLayoutContainer);
